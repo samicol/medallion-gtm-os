@@ -1,7 +1,9 @@
 # Medallion GTM Context OS
 
 ## Company
-Medallion (medallion.co) — provider operations platform (credentialing, licensing, payer enrollment) for telehealth, digital health, and healthcare staffing companies. To be filled in with detail after research.
+Medallion (medallion.co) — AI-powered provider operations platform automating credentialing, payer enrollment, cross-state licensing, and provider data management. Serves 300+ healthcare organizations including digital health companies, telehealth platforms, multi-site provider groups, and health systems across the US. Founded by Derek Lo (CEO). $130M raised total; Series D ($43M) closed August 2025. Acquired Andros; describes itself as "the largest AI-native credentialing platform in the country."
+
+Key files: context/icp/icp.md, context/icp/personas.md, context/docs/research/
 
 ## How this folder works
 
