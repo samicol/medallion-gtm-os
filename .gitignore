@@ -1,0 +1,6 @@
+.env
+.env.*
+*.csv
+*.xlsx
+.DS_Store
+.claude/settings.local.json
