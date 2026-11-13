@@ -1,0 +1,165 @@
+# Copy ban list: the global list /campaign-copy (and any copy checker you build) reads.
+# Company-specific bans (words, angles, names that must never appear) go in
+# context/messaging/facts.md, not here. Edit freely: add, remove, move between sections.
+#
+# Rule: a ban is enforced on NEW text. If text you were given to edit already contains
+# a banned word, flag it; don't silently rewrite the user's own words (render mode is diff-only).
+#
+# Matching: case-insensitive. `words` match whole words (including listed inflections);
+# `phrases` match as substrings; `patterns` are regexes.
+
+characters:            # never in generated copy
+  - "\u2014"      # em dash: never, anywhere
+  - "\u2013"      # en dash
+  - "\u2026"      # ellipsis character
+  - "!"                # exclamation marks read as marketing / AI (subjects AND body)
+
+words:
+  # core bans (iron laws + campaign-copy)
+  - curious            # reads as AI-written and as a spam trigger
+  - curiosity
+  - free               # campaign-copy: no "free"
+  - cheap
+  - leverage
+  - leveraging
+  - synergy
+  - synergies
+  - optimize
+  - optimizing
+  - ideate
+  - unpack
+  - deep-dive
+  - guaranteed
+  - guarantee
+  # AI tells
+  - delve
+  - delving
+  - utilize
+  - utilizing
+  - streamline
+  - streamlined
+  - streamlining
+  - seamless
+  - seamlessly
+  - robust
+  - elevate
+  - elevating
+  - unlock
+  - unlocking
+  - empower
+  - empowering
+  - harness
+  - holistic
+  - cutting-edge
+  - game-changer
+  - game-changing
+  - revolutionize
+  - revolutionary
+  - transformative
+  - paradigm
+  - pivotal
+  - landscape
+  - realm
+  - tapestry
+  - testament
+  - embark
+  - foster
+  - bolster
+  - supercharge
+  - turbocharge
+  - skyrocket
+  - unparalleled
+  - next-level
+  - best-in-class
+  - world-class
+  - state-of-the-art
+  - innovative
+  - bespoke
+  - meticulous
+  - meticulously
+  - comprehensive
+  - furthermore
+  - moreover
+  - additionally
+  - notably
+  - endeavor
+  - navigate
+  - navigating
+  - solutions          # marketing-speak; say what it is
+
+phrases:
+  # core bans (iron laws + campaign-copy)
+  - "just following up"
+  - "circling back"
+  - "bumping this"
+  - "i'll be direct"
+  - "hope you're doing well"
+  - "book a call"
+  - "schedule 15 minutes"
+  - "let me know when you're free"
+  - "act now"
+  - "limited time"
+  - "no obligation"
+  - "click here"
+  - "urgent"
+  - "a seat like that"
+  - "in the ai era"
+  - "in the age of ai"
+  - "the setup is simple"
+  - "fresh capital"
+  - "newly funded"
+  - "next round"
+  - "quick win"
+  - "no big deal"
+  - "small spend"
+  - "minimal cost"
+  - "in today's fast-paced"
+  - "it's no secret"
+  - "let me tell you"
+  - "hot take"
+  - "excited to announce"
+  - "thrilled to"
+  - "proud to say"
+  - "shortest email"
+  # AI / template tells
+  - "i hope this email finds you"
+  - "i hope this finds you"
+  - "hope you're well"
+  - "i wanted to reach out"
+  - "reaching out because"
+  - "touch base"
+  - "touching base"
+  - "just wanted to"
+  - "feel free to"
+  - "don't hesitate"
+  - "looking forward to hearing"
+  - "at the end of the day"
+  - "move the needle"
+  - "low-hanging fruit"
+  - "win-win"
+  - "pain points"
+  - "value-add"
+  - "ever-evolving"
+  - "it's worth noting"
+  - "worth noting"
+  - "in this day and age"
+  - "take it to the next level"
+  - "a game changer"
+  - "dive into"
+  - "deep dive"
+  - "unlock the"
+  - "the power of"
+
+patterns:              # regexes (openers that read as surveillance or templates)
+  - "\\b(i )?saw (you|your|that)\\b"
+  - "\\b(i )?noticed (you|your|that)\\b"
+  - "\\blooks like\\b"
+  - "\\bcongrats?\\b"
+  - "\\bcongratulations\\b"
+  - "\\bnot only\\b.*\\bbut also\\b"     # AI rhythm
+  - "\\bit's not (just )?about\\b"        # AI rhythm ("it's not about X, it's about Y")
+
+subject:               # extra rules for subject lines
+  max_words: 8
+  lowercase: true      # unless the original subject is not lowercase
+  no_characters: ["!", "[", "]"]  # no emojis, ! or brackets; "?" and ":" are allowed

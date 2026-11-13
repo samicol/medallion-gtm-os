@@ -1,0 +1,28 @@
+# Auth session
+clay-session.json
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+*.egg
+
+# Config & environment
+.env
+clay-config.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Campaign pipeline config (workspace, auth account ids)
+rex-config.json
+
+# Your own campaign briefs and run receipts (contain real workspace, workbook and account ids)
+runs/
+campaigns/
+
+# Workspace cost reports (contain your table names, account names and spend)
+reports/

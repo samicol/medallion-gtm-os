@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ClayLens - Analytics</title>
+    <link rel="icon" href="icons/icon-48.png" />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body class="app-analytics">
+    <!-- ─── Top bar ────────────────────────────────────────────────────────── -->
+    <header class="topbar">
+      <div class="topbar-left">
+        <div class="brand">
+          <span class="brand-mark">◆</span>
+          <span>ClayLens</span>
+          <span class="brand-sub">Analytics</span>
+        </div>
+        <div class="ctx-block">
+          <div class="ctx-line" id="ctx-title">No table connected</div>
+          <div class="ctx-meta" id="ctx-meta">Open ClayLens from a Clay table tab.</div>
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div class="last-analyzed-wrap" id="last-analyzed-wrap" hidden>
+          <span class="dot dot-ok"></span>
+          <span id="last-analyzed">just now</span>
+        </div>
+        <button id="btn-refresh" class="btn btn-secondary" type="button" title="Re-run analysis (bypass cache)">
+          <span class="icon-refresh" aria-hidden="true">↻</span>
+          <span>Refresh</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- ─── Progress strip (hidden when idle) ──────────────────────────────── -->
+    <div id="progress-bar" class="progress-strip" hidden>
+      <div class="progress-strip-row">
+        <span id="progress-stage" class="progress-stage">Analyzing…</span>
+        <span id="progress-partial" class="progress-partial"></span>
+        <span id="progress-pct" class="progress-pct">0%</span>
+      </div>
+      <div class="progress-track">
+        <div id="progress-fill" class="progress-fill"></div>
+      </div>
+    </div>
+
+    <main class="page">
+      <!-- ─── Empty / no-context states ─────────────────────────────────── -->
+      <section id="state-no-context" class="empty-hero" hidden>
+        <div class="empty-hero-icon">⛬</div>
+        <div class="empty-hero-title">No Clay table detected</div>
+        <div class="empty-hero-sub">
+          Open <code>app.clay.com</code> on a table page, then click the
+          ClayLens icon again. The dashboard reads <code>tableId</code> from
+          the URL of the source tab.
+        </div>
+      </section>
+
+      <section id="state-empty" class="empty-hero" hidden>
+        <div class="empty-hero-icon">⊙</div>
+        <div class="empty-hero-title">Ready to analyze</div>
+        <div class="empty-hero-sub">
+          We'll fetch every action and AI cell on this table, score it against
+          model + provider pricing, and roll the cost up by column and row.
+        </div>
+        <button id="btn-empty-analyze" class="btn btn-primary btn-lg" type="button">
+          Analyze table
+        </button>
+      </section>
+
+      <section id="state-loading" class="empty-hero" hidden>
+        <div class="empty-hero-icon spin">◴</div>
+        <div class="empty-hero-title">Crunching costs…</div>
+        <div class="empty-hero-sub">First-time analysis on a large table can take 30–90 seconds.</div>
+      </section>
+
+      <section id="state-error" class="empty-hero" hidden>
+        <div class="empty-hero-icon err">!</div>
+        <div class="empty-hero-title">Couldn't analyze this table</div>
+        <div class="empty-hero-sub" id="state-error-msg">Unknown error.</div>
+        <button id="btn-error-retry" class="btn btn-primary" type="button">Try again</button>
+      </section>
+
+      <!-- ─── Live dashboard ─────────────────────────────────────────────── -->
+      <section id="dashboard" hidden>
+        <!-- KPI strip -->
+        <div class="kpi-grid">
+          <div class="kpi-card">
+            <div class="kpi-label">Total spend</div>
+            <div class="kpi-value" id="kpi-cost">$0.00</div>
+            <div class="kpi-sub" id="kpi-cost-sub"> - </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Credits used</div>
+            <div class="kpi-value" id="kpi-credits">0</div>
+            <div class="kpi-sub" id="kpi-credits-sub">across all action cells</div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Rows analyzed</div>
+            <div class="kpi-value" id="kpi-rows">0</div>
+            <div class="kpi-sub" id="kpi-rows-sub"> - </div>
+          </div>
+          <div class="kpi-card">
+            <div class="kpi-label">Cost per success</div>
+            <div class="kpi-value" id="kpi-cps">$0.00</div>
+            <div class="kpi-sub" id="kpi-cps-sub">net of refunds</div>
+          </div>
+        </div>
+
+        <!-- Chart row -->
+        <div class="chart-grid">
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Cost share by column</h2>
+              <span class="panel-sub">Top 8 + other</span>
+            </div>
+            <div class="panel-body chart-doughnut-wrap">
+              <canvas id="chart-doughnut" height="320"></canvas>
+            </div>
+          </div>
+
+          <div class="panel">
+            <div class="panel-header">
+              <h2 class="panel-title">Cost distribution</h2>
+              <span class="panel-sub">Top 10 columns</span>
+            </div>
+            <div class="panel-body chart-bar-wrap">
+              <canvas id="chart-bar" height="320"></canvas>
+            </div>
+          </div>
+        </div>
+
+        <!-- Columns panel -->
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Columns</h2>
+            <div class="panel-controls">
+              <select id="filter-model" class="form-select" aria-label="Filter by model">
+                <option value="">All models</option>
+              </select>
+              <select id="filter-status" class="form-select" aria-label="Filter by status">
+                <option value="">All statuses</option>
+                <option value="errors">Has errors</option>
+                <option value="uncosted">Uncosted cells</option>
+              </select>
+              <input
+                id="filter-search"
+                type="search"
+                class="form-input"
+                placeholder="Search columns…"
+                aria-label="Search columns"
+              />
+              <button id="btn-export-csv" class="btn btn-secondary btn-sm" type="button">
+                Export CSV
+              </button>
+            </div>
+          </div>
+          <div class="panel-body no-pad">
+            <div class="table-wrap">
+              <table class="data data-columns" id="columns-table">
+                <thead>
+                  <tr>
+                    <th data-sort="field_name">Column <span class="sort-indicator"></span></th>
+                    <th data-sort="model">Model <span class="sort-indicator"></span></th>
+                    <th class="numeric" data-sort="runs">Runs <span class="sort-indicator"></span></th>
+                    <th class="numeric" data-sort="success_pct">Success <span class="sort-indicator"></span></th>
+                    <th class="numeric" data-sort="errors">Errors <span class="sort-indicator"></span></th>
+                    <th class="numeric" data-sort="total_cost_usd">Cost <span class="sort-indicator"></span></th>
+                    <th class="numeric" data-sort="cost_per_run">$/run <span class="sort-indicator"></span></th>
+                    <th class="numeric" data-sort="p50_cost">p50 <span class="sort-indicator"></span></th>
+                    <th class="numeric" data-sort="p95_cost">p95 <span class="sort-indicator"></span></th>
+                    <th class="numeric" data-sort="share_pct">Share <span class="sort-indicator"></span></th>
+                  </tr>
+                </thead>
+                <tbody id="columns-tbody"></tbody>
+              </table>
+              <div id="columns-empty" class="table-empty" hidden>
+                No columns match the current filters.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Top rows panel -->
+        <div class="panel">
+          <div class="panel-header">
+            <h2 class="panel-title">Most expensive rows</h2>
+            <div class="panel-controls">
+              <span class="panel-sub" id="top-rows-count">0 rows</span>
+              <input
+                id="rows-search"
+                type="search"
+                class="form-input"
+                placeholder="Search record_id…"
+                aria-label="Search rows"
+              />
+            </div>
+          </div>
+          <div class="panel-body no-pad">
+            <div class="rows-table" id="rows-list"></div>
+            <div id="rows-empty" class="table-empty" hidden>
+              No rows match the current filter.
+            </div>
+          </div>
+        </div>
+
+        <div class="footer-meta" id="footer-meta"></div>
+      </section>
+    </main>
+
+    <div id="toast-stack" class="toast-stack" aria-live="polite"></div>
+    <div id="modal-host"></div>
+
+    <script src="vendor/chart.umd.min.js"></script>
+    <script type="module" src="analytics.js"></script>
+  </body>
+</html>

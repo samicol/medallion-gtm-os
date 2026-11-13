@@ -1,0 +1,53 @@
+{
+  "date_label": "Aug 06 2026",
+  "timezone": "America/New_York",
+  "seed_csv": "~/Downloads/mailreach_spamchecker_emails.csv",
+
+  "campaign": {
+    "name_template": "Inbox Placement Test - {date} - {pool}",
+    "max_emails_per_day": 1000,
+    "plain_text": true,
+    "open_tracking": false,
+    "send_days": ["monday", "tuesday", "wednesday", "thursday", "friday"]
+  },
+
+  "copy": {
+    "subject": "{subject variant A|subject variant B|subject variant C}",
+    "body": "{Hi|Hey} {FIRST_NAME},\n\n<line 1 with spintax>\n\n<line 2 with spintax>\n\n{Best|Thanks},\n{SENDER_EMAIL_SIGNATURE}"
+  },
+
+  "pools": [
+    {
+      "key": "winnr",
+      "name": "Winnr",
+      "auth": "Custom SMTP",
+      "segment": "M365",
+      "sender_email_ids": [1001, 1002, 1003],
+      "tag": ""
+    },
+    {
+      "key": "zapmail-google",
+      "name": "Zapmail Google",
+      "auth": "Google Workspace OAuth",
+      "segment": "GW",
+      "sender_email_ids": [2001, 2002],
+      "tag": ""
+    },
+    {
+      "key": "zapmail-ms",
+      "name": "Zapmail Microsoft",
+      "auth": "Microsoft OAuth",
+      "segment": "M365",
+      "sender_email_ids": [3001, 3002],
+      "tag": ""
+    }
+  ],
+
+  "sheet": {
+    "spreadsheet_id": "",
+    "tab": "MailReach Tests",
+    "sheet_id": 0,
+    "start_row": 1,
+    "round_label": "Round 1"
+  }
+}

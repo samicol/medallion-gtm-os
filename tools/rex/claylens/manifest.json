@@ -1,0 +1,45 @@
+{
+  "manifest_version": 3,
+  "name": "ClayLens (Rex)",
+  "version": "1.0.0",
+  "description": "Cost analytics dashboard for Clay.com tables. Rex's companion browser extension.",
+  "permissions": ["storage", "scripting", "alarms"],
+  "host_permissions": ["https://app.clay.com/*", "https://api.clay.com/*"],
+  "web_accessible_resources": [
+    {
+      "resources": [
+        "analytics.html",
+        "analytics.js",
+        "styles.css",
+        "vendor/chart.umd.min.js",
+        "lib/*",
+        "icons/*"
+      ],
+      "matches": ["https://app.clay.com/*"]
+    }
+  ],
+  "background": {
+    "service_worker": "background.js",
+    "type": "module"
+  },
+  "action": {
+    "default_title": "ClayLens: Open Analytics",
+    "default_icon": {
+      "16": "icons/icon-16.png",
+      "48": "icons/icon-48.png",
+      "128": "icons/icon-128.png"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://app.clay.com/*"],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "icons": {
+    "16": "icons/icon-16.png",
+    "48": "icons/icon-48.png",
+    "128": "icons/icon-128.png"
+  }
+}

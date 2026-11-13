@@ -1,0 +1,191 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/leszek-lammel-advisory/rex/skills/design-clay-table-json/references/flow-blueprint.schema.json",
+  "title": "Rex Clay flow blueprint (table JSON)",
+  "type": "object",
+  "required": [
+    "schemaVersion",
+    "kind",
+    "dataPolicy",
+    "flow",
+    "requiredBindings",
+    "tables"
+  ],
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "schemaVersion": {
+      "const": "rex.clay.flow/v1"
+    },
+    "kind": {
+      "enum": [
+        "draft-flow",
+        "example-flow",
+        "approved-live-export"
+      ]
+    },
+    "exportedAt": {
+      "type": "string"
+    },
+    "compiledAt": {
+      "type": "string"
+    },
+    "dataPolicy": {
+      "type": "string"
+    },
+    "flow": {
+      "type": "object",
+      "required": [
+        "slug",
+        "name",
+        "pattern",
+        "workspace",
+        "workbook",
+        "buildOrder"
+      ],
+      "properties": {
+        "slug": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "pattern": {
+          "enum": [
+            "people-first",
+            "signal-first",
+            "account-first"
+          ]
+        },
+        "workspace": {
+          "type": "object"
+        },
+        "workbook": {
+          "type": "object"
+        },
+        "buildOrder": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "string"
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "requiredBindings": {
+      "type": "object"
+    },
+    "promptContracts": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "templateProvenance": {
+      "type": "array",
+      "items": {
+        "type": "object"
+      }
+    },
+    "tables": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/table"
+      }
+    }
+  },
+  "additionalProperties": true,
+  "$defs": {
+    "table": {
+      "type": "object",
+      "required": [
+        "logicalId",
+        "name",
+        "buildAfter",
+        "columns",
+        "views"
+      ],
+      "properties": {
+        "logicalId": {
+          "type": "string",
+          "minLength": 1
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "buildAfter": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "columns": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/column"
+          }
+        },
+        "views": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": [
+              "logicalId",
+              "name",
+              "fields"
+            ]
+          }
+        }
+      },
+      "additionalProperties": true
+    },
+    "column": {
+      "type": "object",
+      "required": [
+        "index",
+        "name",
+        "type"
+      ],
+      "properties": {
+        "index": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "type": {
+          "enum": [
+            "source",
+            "action",
+            "formula",
+            "text",
+            "number",
+            "url",
+            "date",
+            "boolean",
+            "select"
+          ]
+        },
+        "typeSettings": {
+          "type": "object"
+        },
+        "sourceDetails": {
+          "type": "array",
+          "items": {
+            "type": "object"
+          }
+        }
+      },
+      "additionalProperties": true
+    }
+  }
+}

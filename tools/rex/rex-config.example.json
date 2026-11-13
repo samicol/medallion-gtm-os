@@ -1,0 +1,12 @@
+{
+  "_instructions": "Copy to rex-config.json (gitignored) and fill in. workspaceId is required: the pipeline never guesses a workspace. List auth accounts with ClayClient().list_auth_accounts(); use the model ids your workspace offers.",
+  "workspaceId": 0,
+  "folderId": "",
+  "authAccounts": {
+    "llm": "aa_YOUR_AI_ACCOUNT_ID"
+  },
+  "models": {
+    "default": "YOUR_MODEL_ID"
+  },
+  "budgetUsd": 5
+}

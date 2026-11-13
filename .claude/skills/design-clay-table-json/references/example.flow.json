@@ -1,0 +1,332 @@
+{
+  "$schema": "./flow-blueprint.schema.json",
+  "schemaVersion": "rex.clay.flow/v1",
+  "kind": "example-flow",
+  "dataPolicy": "Configuration only. No Clay rows or cell values.",
+  "flow": {
+    "slug": "example-us-independent-breweries",
+    "name": "Example | US independent breweries (fictional seller)",
+    "pattern": "account-first",
+    "workspace": {
+      "binding": "${workspace.id}"
+    },
+    "workbook": {
+      "binding": "${workbook.id}",
+      "create": {
+        "name": "Example | US independent breweries (fictional seller)",
+        "settings": {
+          "isAutoRun": false
+        }
+      }
+    },
+    "buildOrder": [
+      "companies"
+    ]
+  },
+  "requiredBindings": {
+    "workspace": {
+      "placeholder": "${workspace.id}"
+    },
+    "authAccounts": {
+      "llm": {
+        "placeholder": "${bindings.authAccounts.llm}",
+        "resolution": "The AI account for use-ai columns in your workspace."
+      }
+    },
+    "models": {
+      "default": {
+        "placeholder": "${bindings.models.default}",
+        "resolution": "The model id the contract names, as your Clay workspace offers it."
+      }
+    }
+  },
+  "tables": [
+    {
+      "logicalId": "companies",
+      "name": "Companies | US independent breweries",
+      "tableSettings": {
+        "AUTO_RUN_ON": false
+      },
+      "buildAfter": [],
+      "columns": [
+        {
+          "index": 0,
+          "name": "Source | US Independent Breweries",
+          "type": "source",
+          "typeSettings": {
+            "sourceIds": [
+              "${tables.companies.sources.source_us_independent_breweries.id}"
+            ],
+            "canCreateRecords": true
+          },
+          "sourceDetails": [
+            {
+              "name": "US independent breweries, 11-200 staff",
+              "type": "v3-action",
+              "typeSettings": {
+                "name": "US independent breweries, 11-200 staff",
+                "idPath": "clay_metadata.clay_company_id",
+                "inputs": {
+                  "dslQuery": "select from companies\nwhere industry in (\"Food and Beverage Manufacturing\", \"Food and Beverage Services\", \"Beverage Manufacturing\")\n  and description contains (\"brewery\", \"brewing\", \"craft beer\")\n  and locations.count(country_name = \"United States\") >= 1\n  and company_size in (\"11-50\", \"51-200\")\nlimit 10",
+                  "entityType": "companies",
+                  "selectProjectionName": "table-companies",
+                  "selectProjectionVersion": 2
+                },
+                "iconType": "BuildingWithMagnifyingGlass",
+                "actionKey": "run-search-dsl-export-to-s3",
+                "recordsPath": "companies",
+                "actionPackageId": "e251a70e-46d7-4f3a-b3ef-a211ad3d8bd2",
+                "previewTextPath": "name",
+                "sourceRecordLimit": 50000,
+                "defaultPreviewText": "Company",
+                "createdFromWorkbookId": "${workbook.id}",
+                "disableTriggerOnCreate": true,
+                "disableTriggerOnUpdate": true
+              }
+            }
+          ]
+        },
+        {
+          "index": 1,
+          "name": "Name",
+          "type": "formula",
+          "typeSettings": {
+            "dataTypeSettings": {
+              "type": "text"
+            },
+            "formulaType": "text",
+            "formulaText": "{{@Source | US Independent Breweries}}.name"
+          }
+        },
+        {
+          "index": 2,
+          "name": "Domain",
+          "type": "formula",
+          "typeSettings": {
+            "dataTypeSettings": {
+              "type": "url"
+            },
+            "formulaType": "text",
+            "formulaText": "{{@Source | US Independent Breweries}}.domain"
+          }
+        },
+        {
+          "index": 3,
+          "name": "LinkedIn URL",
+          "type": "formula",
+          "typeSettings": {
+            "dataTypeSettings": {
+              "type": "url"
+            },
+            "formulaType": "text",
+            "formulaText": "{{@Source | US Independent Breweries}}.social_urls.linkedin"
+          }
+        },
+        {
+          "index": 4,
+          "name": "Description",
+          "type": "formula",
+          "typeSettings": {
+            "dataTypeSettings": {
+              "type": "text"
+            },
+            "formulaType": "text",
+            "formulaText": "{{@Source | US Independent Breweries}}.description"
+          }
+        },
+        {
+          "index": 5,
+          "name": "Qualify Brewery",
+          "type": "action",
+          "typeSettings": {
+            "dataTypeSettings": {
+              "type": "json"
+            },
+            "actionKey": "use-ai",
+            "actionPackageId": "67ba01e9-1898-4e7d-afe7-7ebe24819a57",
+            "authAccountId": "${bindings.authAccounts.llm}",
+            "inputsBinding": [
+              {
+                "name": "useCase",
+                "formulaText": "\"use-ai\""
+              },
+              {
+                "name": "prompt",
+                "formulaText": "\"You decide whether a company is an independent beer brewery that brews and sells its own beer.\\n\\nQualify: craft breweries, brewpubs and production breweries that brew beer under their own brands.\\nReject: coffee, tea, kombucha, spirits or cider makers; ingredient and equipment suppliers; trade bodies, media, education and marketing agencies; any company whose description does not say it brews beer.\\nJudge only from the name and description below. If they do not say the company brews beer, answer no.\\n\\nCompany name: \" + Clay.formatForAIPrompt({{@Name}}) + \"\\nDescription: \" + Clay.formatForAIPrompt({{@Description}}) + \"\\n\\nReturn isBrewery (\\\"yes\\\" or \\\"no\\\") and one sentence of reason that quotes the words in the description you relied on.\""
+              },
+              {
+                "name": "model",
+                "formulaText": "\"${bindings.models.default}\""
+              },
+              {
+                "name": "answerSchemaType",
+                "formulaMap": {
+                  "type": "\"json\"",
+                  "jsonType": "\"JSONSchema\"",
+                  "jsonSchema": "\"{\\n  \\\"type\\\": \\\"object\\\",\\n  \\\"properties\\\": {\\n    \\\"isBrewery\\\": {\\n      \\\"type\\\": \\\"string\\\",\\n      \\\"enum\\\": [\\n        \\\"yes\\\",\\n        \\\"no\\\"\\n      ]\\n    },\\n    \\\"reason\\\": {\\n      \\\"type\\\": \\\"string\\\"\\n    }\\n  },\\n  \\\"required\\\": [\\n    \\\"isBrewery\\\",\\n    \\\"reason\\\"\\n  ],\\n  \\\"additionalProperties\\\": false\\n}\""
+                }
+              },
+              {
+                "name": "_metadata",
+                "formulaMap": {
+                  "modelSource": "user"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "index": 6,
+          "name": "Brewery Qualified?",
+          "type": "formula",
+          "typeSettings": {
+            "dataTypeSettings": {
+              "type": "text"
+            },
+            "formulaType": "text",
+            "formulaText": "{{@Qualify Brewery}}?.isBrewery",
+            "mappedResultPath": [
+              "isBrewery"
+            ]
+          }
+        },
+        {
+          "index": 7,
+          "name": "Qualification Reason",
+          "type": "formula",
+          "typeSettings": {
+            "dataTypeSettings": {
+              "type": "text"
+            },
+            "formulaType": "text",
+            "formulaText": "{{@Qualify Brewery}}?.reason",
+            "mappedResultPath": [
+              "reason"
+            ]
+          }
+        },
+        {
+          "index": 8,
+          "name": "Write Opening Line",
+          "type": "action",
+          "typeSettings": {
+            "dataTypeSettings": {
+              "type": "json"
+            },
+            "actionKey": "use-ai",
+            "actionPackageId": "67ba01e9-1898-4e7d-afe7-7ebe24819a57",
+            "authAccountId": "${bindings.authAccounts.llm}",
+            "inputsBinding": [
+              {
+                "name": "useCase",
+                "formulaText": "\"use-ai\""
+              },
+              {
+                "name": "prompt",
+                "formulaText": "\"Write the first sentence of a cold email to the owner of the brewery below. The sender sells brewhouse scheduling software (a fictional company used as an example).\\n\\nOpen on one concrete fact from the description (a beer, the brewery's history or its taproom). Write the company name the way a person says it, without legal suffixes or symbols. Do not mention the software, do not praise, do not invent anything the description does not say. One sentence, under 25 words.\\n\\nCompany name: \" + Clay.formatForAIPrompt({{@Name}}) + \"\\nDescription: \" + Clay.formatForAIPrompt({{@Description}})"
+              },
+              {
+                "name": "model",
+                "formulaText": "\"${bindings.models.default}\""
+              },
+              {
+                "name": "answerSchemaType",
+                "formulaMap": {
+                  "type": "\"json\"",
+                  "jsonType": "\"JSONSchema\"",
+                  "jsonSchema": "\"{\\n  \\\"type\\\": \\\"object\\\",\\n  \\\"properties\\\": {\\n    \\\"openingLine\\\": {\\n      \\\"type\\\": \\\"string\\\"\\n    }\\n  },\\n  \\\"required\\\": [\\n    \\\"openingLine\\\"\\n  ],\\n  \\\"additionalProperties\\\": false\\n}\""
+                }
+              },
+              {
+                "name": "_metadata",
+                "formulaMap": {
+                  "modelSource": "user"
+                }
+              }
+            ],
+            "conditionalRunFormulaText": "{{@Brewery Qualified?}} == \"yes\""
+          }
+        },
+        {
+          "index": 9,
+          "name": "Opening Line",
+          "type": "formula",
+          "typeSettings": {
+            "dataTypeSettings": {
+              "type": "text"
+            },
+            "formulaType": "text",
+            "formulaText": "{{@Write Opening Line}}?.openingLine",
+            "mappedResultPath": [
+              "openingLine"
+            ]
+          }
+        }
+      ],
+      "views": [
+        {
+          "logicalId": "default_view",
+          "name": "Demo",
+          "description": null,
+          "isAcceptedDemoView": true,
+          "fields": {
+            "{{@Source | US Independent Breweries}}": {
+              "isVisible": true,
+              "width": 200
+            },
+            "{{@Name}}": {
+              "isVisible": true,
+              "width": 200
+            },
+            "{{@Domain}}": {
+              "isVisible": true,
+              "width": 200
+            },
+            "{{@LinkedIn URL}}": {
+              "isVisible": true,
+              "width": 200
+            },
+            "{{@Description}}": {
+              "isVisible": true,
+              "width": 200
+            },
+            "{{@Qualify Brewery}}": {
+              "isVisible": true,
+              "width": 200
+            },
+            "{{@Brewery Qualified?}}": {
+              "isVisible": true,
+              "width": 200
+            },
+            "{{@Qualification Reason}}": {
+              "isVisible": true,
+              "width": 200
+            },
+            "{{@Write Opening Line}}": {
+              "isVisible": true,
+              "width": 200
+            },
+            "{{@Opening Line}}": {
+              "isVisible": true,
+              "width": 200
+            }
+          },
+          "filter": {
+            "items": [
+              {
+                "type": "EQUAL",
+                "value": "yes",
+                "field": "{{@Brewery Qualified?}}"
+              }
+            ],
+            "combinationMode": "AND"
+          },
+          "sort": null,
+          "limit": null,
+          "offset": null,
+          "typeSettings": {}
+        }
+      ]
+    }
+  ]
+}

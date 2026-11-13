@@ -1,0 +1,474 @@
+{
+  "title": "Reliance HMO: an outbound GTM system, end to end",
+  "subtitle": "Illustrative example. Not a real Reliance HMO campaign. Row 1 reads left to right, row 2 right to left, row 3 left to right.",
+  "rows": [
+    {
+      "title": "Find and qualify accounts",
+      "direction": "ltr",
+      "columns": [
+        "1A",
+        "1B",
+        "1C",
+        "1D",
+        "1E",
+        "1F",
+        [
+          "1G",
+          "1H"
+        ],
+        "1I"
+      ]
+    },
+    {
+      "title": "Pick the people and write the message",
+      "direction": "rtl",
+      "columns": [
+        [
+          "2A",
+          "2B",
+          "2C"
+        ],
+        "2D",
+        "2E",
+        "2F",
+        "2G",
+        "2H"
+      ]
+    },
+    {
+      "title": "Send, sort replies and close",
+      "direction": "ltr",
+      "columns": [
+        "3A",
+        "3B",
+        [
+          "o1",
+          "o2",
+          "o3",
+          "o4",
+          "o5"
+        ],
+        [
+          "a1",
+          "a2",
+          "a3",
+          "a4",
+          "a5"
+        ],
+        "3C",
+        "3D",
+        "3E",
+        "3F",
+        "3G"
+      ]
+    }
+  ],
+  "nodes": {
+    "1A": {
+      "kind": "start",
+      "title": "Context OS",
+      "sub": "ICP, personas, offer, message angles",
+      "tools": [
+        "claude_code",
+        "github"
+      ],
+      "w": 320
+    },
+    "1B": {
+      "kind": "step",
+      "title": "Buying signals",
+      "sub": [
+        "Hiring 3+ roles",
+        "HMO listed in job posts",
+        "Recent funding round",
+        "New HR leader",
+        "Q4 renewal window"
+      ],
+      "tools": [
+        "clay"
+      ]
+    },
+    "1C": {
+      "kind": "step",
+      "title": "Find companies",
+      "sub": "Nigeria, 3 to 500 staff",
+      "tools": [
+        "clay"
+      ]
+    },
+    "1D": {
+      "kind": "step",
+      "title": "Enrich",
+      "sub": "Headcount, industry, job posts, website",
+      "tools": [
+        "clay"
+      ]
+    },
+    "1E": {
+      "kind": "decision",
+      "title": "ICP fit?"
+    },
+    "drop": {
+      "kind": "exit",
+      "title": "Drop",
+      "below": "1E"
+    },
+    "1F": {
+      "kind": "decision",
+      "title": "Staff size?"
+    },
+    "1G": {
+      "kind": "branch",
+      "title": "Small business track",
+      "sub": "3 to 19 staff, leads on price"
+    },
+    "1H": {
+      "kind": "branch",
+      "title": "Corporate track",
+      "sub": "20+ staff, leads on account manager"
+    },
+    "1I": {
+      "kind": "decision",
+      "title": "Current HMO?"
+    },
+    "2A": {
+      "kind": "branch",
+      "title": "Switch angle",
+      "sub": "Names a competitor HMO"
+    },
+    "2B": {
+      "kind": "branch",
+      "title": "Better value",
+      "sub": "Has an HMO, provider unnamed"
+    },
+    "2C": {
+      "kind": "branch",
+      "title": "First-time cover",
+      "sub": "No HMO mentioned"
+    },
+    "2D": {
+      "kind": "step",
+      "title": "Find people",
+      "sub": "Small business: founder, finance lead. Corporate: HR, Head of People, CFO",
+      "w": 280,
+      "tools": [
+        "clay"
+      ]
+    },
+    "2E": {
+      "kind": "step",
+      "title": "Find and verify email",
+      "sub": "Waterfall of providers",
+      "tools": [
+        "clay"
+      ]
+    },
+    "2F": {
+      "kind": "decision",
+      "title": "Email valid?"
+    },
+    "li": {
+      "kind": "exit",
+      "title": "LinkedIn DM instead",
+      "below": "2F"
+    },
+    "2G": {
+      "kind": "decision",
+      "title": "In HubSpot?"
+    },
+    "excl": {
+      "kind": "exit",
+      "title": "Exclude",
+      "below": "2G"
+    },
+    "2H": {
+      "kind": "step",
+      "title": "Personalise",
+      "sub": "Claygent reads the signal, AI writes the opener for the angle",
+      "w": 300,
+      "tools": [
+        "clay",
+        "claude"
+      ]
+    },
+    "3A": {
+      "kind": "step",
+      "title": "Send the sequence",
+      "sub": "One sequence per track, 3 emails over 7 days",
+      "tools": [
+        "plusvibe"
+      ]
+    },
+    "3B": {
+      "kind": "step",
+      "title": "Sort replies",
+      "sub": "AI tags the intent",
+      "tools": [
+        "n8n"
+      ]
+    },
+    "o1": {
+      "kind": "branch",
+      "title": "Interested",
+      "h": 80
+    },
+    "o2": {
+      "kind": "branch",
+      "title": "Gives a renewal date",
+      "h": 80
+    },
+    "o3": {
+      "kind": "branch",
+      "title": "Wrong person",
+      "h": 80
+    },
+    "o4": {
+      "kind": "branch",
+      "title": "Unsubscribes",
+      "h": 80
+    },
+    "o5": {
+      "kind": "branch",
+      "title": "No reply",
+      "h": 80
+    },
+    "a1": {
+      "kind": "step",
+      "title": "Create deal, alert the rep",
+      "w": 300,
+      "h": 80,
+      "tools": [
+        "hubspot"
+      ]
+    },
+    "a2": {
+      "kind": "step",
+      "title": "Task 60 days before renewal",
+      "w": 300,
+      "h": 80,
+      "tools": [
+        "hubspot"
+      ]
+    },
+    "a3": {
+      "kind": "exit",
+      "title": "Get the right contact, back to 2D",
+      "w": 300,
+      "h": 80
+    },
+    "a4": {
+      "kind": "exit",
+      "title": "Suppress everywhere",
+      "w": 300,
+      "h": 80
+    },
+    "a5": {
+      "kind": "exit",
+      "title": "Wait for a new signal, back to 1B",
+      "w": 300,
+      "h": 80
+    },
+    "3C": {
+      "kind": "step",
+      "title": "Meeting booked",
+      "w": 190,
+      "h": 100
+    },
+    "3D": {
+      "kind": "step",
+      "title": "Quote sent",
+      "w": 190,
+      "h": 100
+    },
+    "3E": {
+      "kind": "step",
+      "title": "Staff list in",
+      "w": 190,
+      "h": 100
+    },
+    "3F": {
+      "kind": "step",
+      "title": "Plan active",
+      "w": 190,
+      "h": 100
+    },
+    "3G": {
+      "kind": "start",
+      "title": "Weekly review",
+      "sub": "Reply, meeting and win rates by signal, size band and angle",
+      "w": 300,
+      "align": "bottom"
+    }
+  },
+  "edges": [
+    [
+      "1A",
+      "1B"
+    ],
+    [
+      "1B",
+      "1C"
+    ],
+    [
+      "1C",
+      "1D"
+    ],
+    [
+      "1D",
+      "1E"
+    ],
+    [
+      "1E",
+      "1F",
+      "Yes"
+    ],
+    [
+      "1E",
+      "drop",
+      "No"
+    ],
+    [
+      "1F",
+      "1G",
+      "3 to 19"
+    ],
+    [
+      "1F",
+      "1H",
+      "20+"
+    ],
+    [
+      "1G",
+      "1I"
+    ],
+    [
+      "1H",
+      "1I"
+    ],
+    [
+      "1I",
+      "2A"
+    ],
+    [
+      "1I",
+      "2B"
+    ],
+    [
+      "1I",
+      "2C"
+    ],
+    [
+      "2A",
+      "2D"
+    ],
+    [
+      "2B",
+      "2D"
+    ],
+    [
+      "2C",
+      "2D"
+    ],
+    [
+      "2D",
+      "2E"
+    ],
+    [
+      "2E",
+      "2F"
+    ],
+    [
+      "2F",
+      "2G",
+      "Yes"
+    ],
+    [
+      "2F",
+      "li",
+      "No"
+    ],
+    [
+      "2G",
+      "2H",
+      "No"
+    ],
+    [
+      "2G",
+      "excl",
+      "Yes"
+    ],
+    [
+      "2H",
+      "3A"
+    ],
+    [
+      "3A",
+      "3B"
+    ],
+    [
+      "3B",
+      "o1"
+    ],
+    [
+      "3B",
+      "o2"
+    ],
+    [
+      "3B",
+      "o3"
+    ],
+    [
+      "3B",
+      "o4"
+    ],
+    [
+      "3B",
+      "o5"
+    ],
+    [
+      "o1",
+      "a1"
+    ],
+    [
+      "o2",
+      "a2"
+    ],
+    [
+      "o3",
+      "a3"
+    ],
+    [
+      "o4",
+      "a4"
+    ],
+    [
+      "o5",
+      "a5"
+    ],
+    [
+      "a1",
+      "3C"
+    ],
+    [
+      "3C",
+      "3D"
+    ],
+    [
+      "3D",
+      "3E"
+    ],
+    [
+      "3E",
+      "3F"
+    ],
+    [
+      "3F",
+      "3G"
+    ]
+  ],
+  "loop": {
+    "from": "3G",
+    "to": "1A",
+    "label": "Weekly loop: results update the Context OS"
+  }
+}

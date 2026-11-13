@@ -30,7 +30,29 @@ Medallion (medallion.co) — provider operations platform (credentialing, licens
 - Mark internal knowledge (not from public sources) as "Source: internal"
 
 ## Skills
-- To be populated after Step 4 (GTM Starter Kit import)
+Skills live in `.claude/skills/`. Type `/` in Claude Code to list them.
+
+| Skill | What it does |
+|---|---|
+| `/signal-matrix` | Build a scored signal matrix from ICP and research |
+| `/build-workflow-spec` | Spec a signal-based outbound workflow for Clay |
+| `/campaign-strategy` | Generate and rank outbound campaign ideas |
+| `/campaign-copy` | Write email and LinkedIn copy inside a workflow spec |
+| `/campaign-contract` | Define the contract (variables, facts) for a campaign |
+| `/campaign-qa` | QA a campaign before launch |
+| `/build-clay` | Build a Clay table from a workflow spec |
+| `/design-clay-table-json` | Design a Clay table as a JSON flow blueprint |
+| `/import-clay-table` | Import a Clay table from JSON |
+| `/save-clay-schema` | Save a Clay table schema to file |
+| `/export-tables` | Export Clay table data |
+| `/calculate-costs` | Estimate Clay data credit costs |
+| `/workspace-cost-audit` | Audit Clay workspace costs |
+| `/agent-browser` | Browse web pages via headless browser |
+| `/crawl4ai` | Crawl websites for structured data |
+| `/miro-gtm-flowchart` | Draw GTM system architecture on a Miro board |
+| `/prompt-builder` | Build Claude prompts from a decision tree |
+| `/inbox-placement-test` | Test email deliverability and inbox placement |
 
 ## Tools
-- To be populated after research and tool setup
+- Clay — data enrichment, signal detection, outbound workflows
+- To be updated with other tools after research

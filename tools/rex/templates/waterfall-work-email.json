@@ -1,0 +1,194 @@
+{
+ "waterfallFieldName": "Work Email",
+ "waterfallGroupName": "Work Email",
+ "attributeEnum": "person/workEmail",
+ "runAsButton": true,
+ "conditionalRunFormulaText": null,
+ "inputCombination": [
+  {
+   "actionIds": [
+    "48a31bbb-63e6-4461-8a62-d88bb2cd6b0f/prospeo-find-work-email-v2",
+    "edb58209-a62d-42be-992a-e41b87eeacc2/leadmagic-find-work-email",
+    "303cd8bc-26dc-4c8c-bd5a-e94528d6c77d/icypeas-find-email-v2",
+    "9515bb04-4267-4074-94eb-653545c3c38f/findymail-find-work-email",
+    "204f124b-1fd1-42dc-8783-dbedb9adce2e/wiza-find-work-email",
+    "a1f0f6b6-f98a-42e3-bfe0-ddfc333d0df1/fullenrich-find-work-email"
+   ],
+   "inputSemanticType": "full-name"
+  },
+  {
+   "actionIds": [
+    "48a31bbb-63e6-4461-8a62-d88bb2cd6b0f/prospeo-find-work-email-v2",
+    "edb58209-a62d-42be-992a-e41b87eeacc2/leadmagic-find-work-email",
+    "303cd8bc-26dc-4c8c-bd5a-e94528d6c77d/icypeas-find-email-v2",
+    "9515bb04-4267-4074-94eb-653545c3c38f/findymail-find-work-email",
+    "204f124b-1fd1-42dc-8783-dbedb9adce2e/wiza-find-work-email",
+    "a1f0f6b6-f98a-42e3-bfe0-ddfc333d0df1/fullenrich-find-work-email"
+   ],
+   "inputSemanticType": "company-domain"
+  }
+ ],
+ "requiredInputsBinding": [
+  {
+   "name": "full-name",
+   "formulaText": "{{FULL_NAME}}"
+  },
+  {
+   "name": "company-domain",
+   "formulaText": "{{COMPANY_DOMAIN}}"
+  }
+ ],
+ "customOptions": {
+  "safeToSend": false,
+  "phoneLineType": null,
+  "includeUnknown": false,
+  "includeCatchAll": false,
+  "excludeRoleBased": false,
+  "excludeDisposable": false,
+  "validationStrategy": "conservative",
+  "maxConsecutiveIdenticalNotFound": 0
+ },
+ "requireValidationSuccess": false,
+ "createDataProviderField": false,
+ "steps": [
+  {
+   "name": "Find Work Email (Prospeo)",
+   "type": "actionConfig",
+   "actionKey": "prospeo-find-work-email-v2",
+   "actionPackageId": "48a31bbb-63e6-4461-8a62-d88bb2cd6b0f",
+   "authAccountId": null,
+   "attributePath": "email",
+   "inputsBinding": [
+    {
+     "name": "full_name",
+     "formulaText": "{{FULL_NAME}}"
+    },
+    {
+     "name": "company_domain",
+     "formulaText": "{{COMPANY_DOMAIN}}"
+    }
+   ]
+  },
+  {
+   "name": "Find Work Email (LeadMagic)",
+   "type": "actionConfig",
+   "actionKey": "leadmagic-find-work-email",
+   "actionPackageId": "edb58209-a62d-42be-992a-e41b87eeacc2",
+   "authAccountId": null,
+   "attributePath": "email",
+   "inputsBinding": [
+    {
+     "name": "name",
+     "formulaText": "{{FULL_NAME}}"
+    },
+    {
+     "name": "domain",
+     "formulaText": "{{COMPANY_DOMAIN}}"
+    }
+   ]
+  },
+  {
+   "name": "Find Work Email (Icypeas)",
+   "type": "actionConfig",
+   "actionKey": "icypeas-find-email-v2",
+   "actionPackageId": "303cd8bc-26dc-4c8c-bd5a-e94528d6c77d",
+   "authAccountId": null,
+   "attributePath": "email",
+   "inputsBinding": [
+    {
+     "name": "fullname",
+     "formulaText": "{{FULL_NAME}}"
+    },
+    {
+     "name": "domain",
+     "formulaText": "{{COMPANY_DOMAIN}}"
+    }
+   ]
+  },
+  {
+   "name": "Find Work Email (Findymail)",
+   "type": "actionConfig",
+   "actionKey": "findymail-find-work-email",
+   "actionPackageId": "9515bb04-4267-4074-94eb-653545c3c38f",
+   "authAccountId": null,
+   "attributePath": "email",
+   "inputsBinding": [
+    {
+     "name": "full_name",
+     "formulaText": "{{FULL_NAME}}"
+    },
+    {
+     "name": "company_domain",
+     "formulaText": "{{COMPANY_DOMAIN}}"
+    }
+   ]
+  },
+  {
+   "name": "Find Work Email (Wiza)",
+   "type": "actionConfig",
+   "actionKey": "wiza-find-work-email",
+   "actionPackageId": "204f124b-1fd1-42dc-8783-dbedb9adce2e",
+   "authAccountId": null,
+   "attributePath": "data.email",
+   "inputsBinding": [
+    {
+     "name": "profile_url",
+     "optional": true,
+     "formulaText": "{{LINKEDIN_URL}}"
+    },
+    {
+     "name": "full_name",
+     "optional": true,
+     "formulaText": "{{FULL_NAME}}"
+    },
+    {
+     "name": "company",
+     "optional": true,
+     "formulaText": "{{COMPANY_NAME}}"
+    },
+    {
+     "name": "domain",
+     "optional": true,
+     "formulaText": "{{COMPANY_DOMAIN}}"
+    }
+   ]
+  },
+  {
+   "name": "Find Work Email (FullEnrich)",
+   "type": "actionConfig",
+   "actionKey": "fullenrich-find-work-email",
+   "actionPackageId": "a1f0f6b6-f98a-42e3-bfe0-ddfc333d0df1",
+   "authAccountId": null,
+   "attributePath": "most_probable_email",
+   "inputsBinding": [
+    {
+     "name": "full_name",
+     "optional": true,
+     "formulaText": "{{FULL_NAME}}"
+    },
+    {
+     "name": "company_name",
+     "optional": true,
+     "formulaText": "{{COMPANY_NAME}}"
+    },
+    {
+     "name": "domain",
+     "optional": true,
+     "formulaText": "{{COMPANY_DOMAIN}}"
+    },
+    {
+     "name": "linkedin_url",
+     "optional": true,
+     "formulaText": "{{LINKEDIN_URL}}"
+    }
+   ]
+  }
+ ],
+ "_about": "Example work-email waterfall: Prospeo -> LeadMagic -> Icypeas -> Findymail -> Wiza -> FullEnrich, LeadMagic validation on every step (top-level validationActionConfig, created by API, LEARNINGS #87); verify the results with a second verifier afterwards. Create with ClayClient.create_waterfall_from_template(table, path, inputs={FULL_NAME, COMPANY_DOMAIN, COMPANY_NAME, LINKEDIN_URL}, condition=...). Every authAccountId ships as null: before the first run, set each step (and validationActionConfig) to a connection in YOUR workspace (list them with clay.list_auth_accounts()), or delete the steps you do not use. Prove it on one row before scaling.",
+ "validationActionConfig": {
+  "actionKey": "leadmagic-validate-email",
+  "actionPackageId": "edb58209-a62d-42be-992a-e41b87eeacc2",
+  "inputName": "email",
+  "authAccountId": null
+ }
+}
