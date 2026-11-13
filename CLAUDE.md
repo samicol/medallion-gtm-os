@@ -3,7 +3,7 @@
 ## Company
 Medallion (medallion.co) — AI-powered provider operations platform automating credentialing, payer enrollment, cross-state licensing, and provider data management. Serves 300+ healthcare organizations including digital health companies, telehealth platforms, multi-site provider groups, and health systems across the US. Founded by Derek Lo (CEO). $130M raised total; Series D ($43M) closed August 2025. Acquired Andros; describes itself as "the largest AI-native credentialing platform in the country."
 
-Key files: context/icp/icp.md, context/icp/personas.md, context/icp/signal-matrix.md, context/docs/research/, context/docs/gtm-system.md, output/campaigns/digital-health-provider-hiring/workflow-spec.md
+Key files: context/icp/icp.md, context/icp/personas.md, context/icp/signal-matrix.md, context/docs/research/, context/docs/gtm-system.md, context/docs/case-studies.md, context/positioning/value-proposition.md, context/positioning/positioning.md, context/positioning/competitors.md, context/messaging/messaging.md, context/brand-kit/brand.md, output/campaigns/digital-health-provider-hiring/workflow-spec.md, output/campaigns/campaign-strategy.md
 
 ## How this folder works
 
